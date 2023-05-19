@@ -1,0 +1,56 @@
+name: Pull Request Validation
+on:
+  pull_request:
+    types:
+      - labeled
+
+jobs:
+  validate-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Validate PR
+        if: github.event.label.name == 'attack'
+        run: |
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          ATTACKS_DIR="attacks/$PR_NUMBER"
+
+          # Check if problem.md exists
+          if [[ ! -f "problem.md" ]]; then
+            echo "::error file=problem.md::problem.md does not exist in the pull request."
+            exit 1
+          fi
+
+          # Check if solution exists
+          if [[ ! -f "solution" ]]; then
+            echo "::error file=solution::solution file does not exist in the pull request."
+            exit 1
+          fi
+
+          # Create the attacks directory if it doesn't exist
+          mkdir -p "$ATTACKS_DIR"
+
+          # Move the files to the attacks directory
+          mv problem.md solution "$ATTACKS_DIR/"
+
+          # Commit the changes
+          git add "$ATTACKS_DIR/problem.md" "$ATTACKS_DIR/solution"
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git commit -m "Organize files into $ATTACKS_DIR"
+
+          # Push the changes back to the pull request branch
+          git push origin HEAD:${{ github.head_ref }}
+
+      - name: Merge PR
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+        uses: octokit/request-action@v2.17
+        with:
+          method: PUT
+          headers: '{"Authorization": "Bearer ${{ secrets.GITHUB_TOKEN }}"}'
+          url: ${{ github.event.pull_request.url }}
+          body: '{"merge_method": "merge"}'
+
