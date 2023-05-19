@@ -47,7 +47,7 @@ jobs:
 
       - name: Merge PR
         if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
-        uses: octokit/request-action@v2.17
+        uses: octokit/request-action@v2.1.7
         with:
           method: PUT
           headers: '{"Authorization": "Bearer ${{ secrets.GITHUB_TOKEN }}"}'
