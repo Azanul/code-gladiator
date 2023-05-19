@@ -41,14 +41,17 @@ jobs:
           # Move the files to the attacks directory
           mv problem.md solution "$ATTACKS_DIR/"
 
-          # Commit the changes
-          git add "$ATTACKS_DIR/problem.md" "$ATTACKS_DIR/solution"
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
-          git commit -m "Organize files into $ATTACKS_DIR"
+          # Check for staged changes
+          if [[ -n $(git diff --cached --exit-code) ]]; then
+            # Commit the changes
+            git add "$ATTACKS_DIR/problem.md" "$ATTACKS_DIR/solution"
+            git config user.email "actions@github.com"
+            git config user.name "GitHub Actions"
+            git commit -m "Organize files into $ATTACKS_DIR"
 
-          # Push the changes back to the pull request branch
-          git push
+            # Push the changes back to the pull request branch
+            git push
+          fi
 
       - name: Merge PR
         if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
