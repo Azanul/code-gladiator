@@ -61,3 +61,30 @@ jobs:
           # Wait for changes to reflect
           sleep 30
 
+      - name: Add 'failure' label
+        uses: octokit/request-action@v2.1.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.compare.outputs.failed == 'true'
+        with:
+          route: POST /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/labels
+          headers: |
+            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            {
+              "labels": ["attack", "failure"]
+            }
+
+      - name: Add 'success' label
+        uses: octokit/request-action@v2.1.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.compare.outputs.failed == 'false'
+        with:
+          route: POST /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/labels
+          headers: |
+            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            {
+              "labels": ["attack", "success"]
+            }

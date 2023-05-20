@@ -82,7 +82,7 @@ jobs:
             Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
           body: |
             {
-              "labels": ["failure"]
+              "labels": ["defense", "failure"]
             }
 
       - name: Add 'success' label
@@ -96,7 +96,7 @@ jobs:
             Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
           body: |
             {
-              "labels": ["success"]
+              "labels": ["defense", "success"]
             }
 
 
