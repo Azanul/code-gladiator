@@ -39,7 +39,7 @@ jobs:
           mkdir -p "$ATTACKS_DIR"
 
           # Move the files to the attacks directory
-          mv -t problem.md solution "$ATTACKS_DIR/"
+          mv problem.md solution "$ATTACKS_DIR/"
 
           # Stage changes
           git add "$ATTACKS_DIR/problem.md" "$ATTACKS_DIR/solution"

@@ -37,7 +37,7 @@ jobs:
       - name: Reorganize
         run: |
           # Move the files to the attacks directory
-          mv -t attempt "$ATTACKS_DIR/"
+          mv attempt "$ATTACKS_DIR/"
 
           # Stage changes
           git add "$ATTACKS_DIR/attempt"
