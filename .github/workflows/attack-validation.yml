@@ -61,16 +61,3 @@ jobs:
           # Wait for changes to reflect
           sleep 30
 
-      - name: Merge PR
-        uses: octokit/request-action@v2.1.7
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          route: PUT /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/merge
-          headers: |
-            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            {
-              "merge_method": "merge"
-            }
-
