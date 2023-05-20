@@ -41,10 +41,12 @@ jobs:
           # Move the files to the attacks directory
           mv problem.md solution "$ATTACKS_DIR/"
 
+          # Stage changes
+          git add "$ATTACKS_DIR/problem.md" "$ATTACKS_DIR/solution"
+
           # Check for staged changes
           if [[ -n $(git diff --cached --exit-code) ]]; then
             # Commit the changes
-            git add "$ATTACKS_DIR/problem.md" "$ATTACKS_DIR/solution"
             git config user.email "actions@github.com"
             git config user.name "GitHub Actions"
             git commit -m "Organize files into $ATTACKS_DIR"
