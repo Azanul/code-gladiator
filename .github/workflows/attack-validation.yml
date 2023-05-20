@@ -65,10 +65,10 @@ jobs:
           remote_head=$(git rev-parse "origin/${{ github.event.pull_request.base.ref }}")
 
           # Set the up_to_date output variable based on the comparison result
-          echo "::set-output name=up_to_date::[[ $local_head = $remote_head ]]"
+          echo "up_to_date=[[ $local_head = $remote_head ]]" >> $GITHUB_OUTPUT
 
       - name: Merge PR
-        if: steps.validate-pr.outputs.up_to_date == 'true'
+        if: ${{ env.up_to_date == 'true' }}
         uses: octokit/request-action@v2.1.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
