@@ -19,6 +19,8 @@ jobs:
 
       - name: Validate PR
         if: github.event.label.name == 'attack'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"
           ATTACKS_DIR="attacks/$PR_NUMBER"
