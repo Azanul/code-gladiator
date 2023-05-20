@@ -1,1 +1,1 @@
-What is the capital of India?
+Q. What is the capital of India?
