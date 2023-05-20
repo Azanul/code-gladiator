@@ -58,17 +58,10 @@ jobs:
           # Fetch the latest changes from the remote repository
           git fetch
 
-          # Get the commit hash of the current local branch's HEAD
-          local_head=$(git rev-parse HEAD)
-
-          # Get the commit hash of the remote branch's HEAD
-          remote_head=$(git rev-parse "origin/${{ github.event.pull_request.base.ref }}")
-
-          # Set the up_to_date output variable based on the comparison result
-          echo "up_to_date=[[ $local_head = $remote_head ]]" >> $GITHUB_OUTPUT
+          # Wait for changes to reflect
+          sleep 30
 
       - name: Merge PR
-        if: ${{ env.up_to_date == 'true' }}
         uses: octokit/request-action@v2.1.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
