@@ -71,14 +71,33 @@ jobs:
             echo "failed='true'" >> $GITHUB_ENV
           fi
 
-      - name: Add 'failed' label
-        uses: peter-evans/create-issue-comment@v1
-        if: steps.cmp_solution.outputs.failed == 'true'
+      - name: Add 'failure' label
+        uses: octokit/request-action@v2.1.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.compare.outputs.failed == 'true'
         with:
-          issue-number: ${{ github.event.pull_request.number }}
+          route: POST /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/labels
+          headers: |
+            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
           body: |
-            The solution does not match the expected solution. Please review and update.
+            {
+              "labels": ["failure"]
+            }
 
+      - name: Add 'success' label
+        uses: octokit/request-action@v2.1.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.compare.outputs.failed == 'false'
+        with:
+          route: POST /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/labels
+          headers: |
+            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            {
+              "labels": ["success"]
+            }
 
 
   merge-pr:
