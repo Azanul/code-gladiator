@@ -7,6 +7,8 @@ on:
 permissions:
   contents: write
 
+if: github.event.label.name == 'attack'
+
 jobs:
   validate-pr:
     runs-on: ubuntu-latest
@@ -18,9 +20,6 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Validate PR
-        if: github.event.label.name == 'attack'
-        env:
-          GH_TOKEN: ${{ github.token }}
         run: |
           PR_NUMBER="${{ github.event.pull_request.number }}"
           ATTACKS_DIR="attacks/$PR_NUMBER"
@@ -57,5 +56,8 @@ jobs:
             git push
           fi
 
-          # Merge the PR
-          gh pr merge ${{ github.event.pull_request.number }} --merge
+      - name: Merge PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr merge ${{ github.event.pull_request.number }} --merge
+
