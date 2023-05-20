@@ -7,11 +7,10 @@ on:
 permissions:
   contents: write
 
-if: github.event.label.name == 'attack'
-
 jobs:
   validate-pr:
     runs-on: ubuntu-latest
+    if: github.event.label.name == 'attack'
 
     steps:
       - name: Check out repository
