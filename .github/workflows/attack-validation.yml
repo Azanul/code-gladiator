@@ -55,8 +55,29 @@ jobs:
             git push
           fi
 
+          # Fetch the latest changes from the remote repository
+          git fetch
+
+          # Get the commit hash of the current local branch's HEAD
+          local_head=$(git rev-parse HEAD)
+
+          # Get the commit hash of the remote branch's HEAD
+          remote_head=$(git rev-parse "origin/${{ github.event.pull_request.base.ref }}")
+
+          # Set the up_to_date output variable based on the comparison result
+          echo "::set-output name=up_to_date::[[ $local_head = $remote_head ]]"
+
       - name: Merge PR
+        if: steps.validate-pr.outputs.up_to_date == 'true'
+        uses: octokit/request-action@v2.1.7
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh pr merge ${{ github.event.pull_request.number }} --merge
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          route: PUT /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/merge
+          headers: |
+            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            {
+              "merge_method": "merge"
+            }
 
