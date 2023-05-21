@@ -11,7 +11,7 @@ jobs:
   validate-pr:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.pr_number.outputs.ATTACK_PR_NUMBER }}
+      attack_pr_number: ${{ steps.pr_number.outputs.ATTACK_PR_NUMBER }}
     if: github.event.label.name == 'defense'
 
     steps:
@@ -69,7 +69,7 @@ jobs:
       - name: Compare solution
         id: cmp_solution
         run: |
-          ATTACKS_DIR="attacks/${{ needs.validate-pr.outputs.pr_number }}"
+          ATTACKS_DIR="attacks/${{ needs.validate-pr.outputs.attack_pr_number }}"
 
           # Compare the contents of attempt and solution
           if ! cmp -s "$ATTACKS_DIR/attempt" "$ATTACKS_DIR/solution"; then
@@ -96,7 +96,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
-          route: POST /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.pr_number }}/labels
+          route: POST /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
           headers: |
             Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
           body: |
@@ -124,7 +124,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
         with:
-          route: POST /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.pr_number }}/labels
+          route: POST /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
           headers: |
             Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
           body: |
@@ -156,4 +156,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          route: PUT /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.pr_number }}/merge
+          route: PUT /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.attack_pr_number }}/merge
