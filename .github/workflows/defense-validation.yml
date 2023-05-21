@@ -93,7 +93,7 @@ jobs:
         if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
           route: POST /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
-          labels": '["attack", "success"]'
+          labels: '["attack", "success"]'
 
       - name: Add 'success' label
         uses: octokit/request-action@v2.1.0
