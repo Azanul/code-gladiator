@@ -80,7 +80,7 @@ jobs:
         uses: octokit/request-action@v2.1.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: steps.cmp_solution.outputs.failed == 'true'
+        if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
           route: POST /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/labels
           headers: |
@@ -94,7 +94,7 @@ jobs:
         uses: octokit/request-action@v2.1.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: steps.cmp_solution.outputs.failed == 'true'
+        if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
           route: POST /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.pr_number }}/labels
           headers: |
@@ -108,7 +108,7 @@ jobs:
         uses: octokit/request-action@v2.1.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: steps.cmp_solution.outputs.failed == 'false'
+        if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
         with:
           route: POST /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/labels
           headers: |
@@ -122,7 +122,7 @@ jobs:
         uses: octokit/request-action@v2.1.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: steps.cmp_solution.outputs.failed == 'false'
+        if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
         with:
           route: POST /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.pr_number }}/labels
           headers: |
