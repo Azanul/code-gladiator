@@ -64,7 +64,7 @@ jobs:
       - name: Compare solution
         id: cmp_solution
         run: |
-          ATTACKS_DIR="attacks/${{ jobs.validate-pr.outputs.ATTACK_PR_NUMBER }}"
+          ATTACKS_DIR="attacks/${{ needs.validate-pr.outputs.pr_number }}"
 
           # Compare the contents of attempt and solution
           if ! cmp -s "$ATTACKS_DIR/attempt" "$ATTACKS_DIR/solution"; then
