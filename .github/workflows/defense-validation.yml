@@ -82,7 +82,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
-          route: POST /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/labels
+          route: POST /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
           headers: |
             Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
           body: |
@@ -96,7 +96,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
-          route: POST /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
+          route: POST /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
           headers: |
             Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
           body: |
@@ -110,7 +110,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
         with:
-          route: POST /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/labels
+          route: POST /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
           headers: |
             Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
           body: |
@@ -124,7 +124,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
         with:
-          route: POST /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
+          route: POST /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
           headers: |
             Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
           body: |
