@@ -78,7 +78,7 @@ jobs:
           fi
 
       - name: Add 'failure' label
-        uses: octokit/request-action@v2.1.7
+        uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LABELS: '{"labels": ["defense", "failure"]}'
@@ -88,7 +88,7 @@ jobs:
           body: ${{ toJSON(env.LABELS) }}
 
       - name: Add 'success' label on attack PR
-        uses: octokit/request-action@v2.1.7
+        uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LABELS: '{"labels": ["attack", "success"]}'
@@ -98,7 +98,7 @@ jobs:
           body: ${{ toJSON(env.LABELS) }}
 
       - name: Add 'success' label
-        uses: octokit/request-action@v2.1.7
+        uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LABELS: '{"labels": ["defense", "success"]}'
@@ -108,7 +108,7 @@ jobs:
           body: ${{ toJSON(env.LABELS) }}
 
       - name: Add 'failure' label on attack PR
-        uses: octokit/request-action@v2.1.7
+        uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LABELS: '{"labels": ["attack", "failure"]}'
@@ -124,7 +124,7 @@ jobs:
 
     steps:
       - name: Merge PR
-        uses: octokit/request-action@v2.1.7
+        uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -137,7 +137,7 @@ jobs:
 
     steps:
       - name: Merge PR
-        uses: octokit/request-action@v2.1.7
+        uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
