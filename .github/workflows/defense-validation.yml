@@ -36,8 +36,11 @@ jobs:
 
       - name: Reorganize
         run: |
-          # Move the files to the attacks directory
+          # Create the attacks directory if it doesn't exist
           ATTACKS_DIR="attacks/${{ steps.pr_number.outputs.ATTACK_PR_NUMBER }}"
+
+          # Move the files to the attacks directory
+          mkdir -p "$ATTACKS_DIR"
           mv attempt "$ATTACKS_DIR/"
 
           # Stage changes
