@@ -81,49 +81,41 @@ jobs:
         uses: octokit/request-action@v2.1.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABELS: '{"labels": ["defense", "failure"]}'
         if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
           route: PUT /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
-          body: |
-            {
-              "labels": ["defense", "failure"]
-            }
+          body: ${{ toJSON(env.LABELS) }}
 
       - name: Add 'success' label on attack PR
         uses: octokit/request-action@v2.1.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABELS: '{"labels": ["attack", "success"]}'
         if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
           route: PUT /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
-          body: |
-            {
-              "labels": ["attack", "success"]
-            }
+          body: ${{ toJSON(env.LABELS) }}
 
       - name: Add 'success' label
         uses: octokit/request-action@v2.1.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABELS: '{"labels": ["defense", "success"]}'
         if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
         with:
           route: PUT /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
-          body: |
-            {
-              "labels": ["defense", "success"]
-            }
+          body: ${{ toJSON(env.LABELS) }}
 
       - name: Add 'failure' label on attack PR
         uses: octokit/request-action@v2.1.7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABELS: '{"labels": ["attack", "failure"]}'
         if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
         with:
           route: PUT /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
-          body: |
-            {
-              "labels": ["attack", "failure"]
-            }
+          body: ${{ toJSON(env.LABELS) }}
 
   merge-pr:
     runs-on: ubuntu-latest
