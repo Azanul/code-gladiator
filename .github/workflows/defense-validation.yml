@@ -84,7 +84,7 @@ jobs:
         if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
           route: POST /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
-          labels: ${{ toJSON('["defense", "failure"]') }}
+          labels: ${{ toJSON(["defense", "failure"]) }}
 
       - name: Add 'success' label on attack PR
         uses: octokit/request-action@v2.1.0
