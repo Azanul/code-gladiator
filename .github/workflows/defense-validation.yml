@@ -117,3 +117,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           route: PUT /repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/merge
+
+  merge-attack-pr:
+    runs-on: ubuntu-latest
+    if: github.event.label.name == 'defense'
+    needs: check-solution
+
+    steps:
+      - name: Merge PR
+        uses: octokit/request-action@v2.1.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          route: PUT /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.pr_number }}/merge
