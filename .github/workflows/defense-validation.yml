@@ -90,31 +90,28 @@ jobs:
         uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABELS: '{"labels": ["attack", "success"]}'
         if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
           route: POST /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
-          body: ${{ toJSON(env.LABELS) }}
+          labels": '["attack", "success"]'
 
       - name: Add 'success' label
         uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABELS: '{"labels": ["defense", "success"]}'
         if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
         with:
           route: POST /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
-          body: ${{ toJSON(env.LABELS) }}
+          labels: '["defense", "success"]'
 
       - name: Add 'failure' label on attack PR
         uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABELS: '{"labels": ["attack", "failure"]}'
         if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
         with:
           route: POST /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
-          body: ${{ toJSON(env.LABELS) }}
+          labels: '["attack", "failure"]'
 
   merge-pr:
     runs-on: ubuntu-latest
