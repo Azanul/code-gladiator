@@ -69,11 +69,12 @@ jobs:
     steps:
       - name: Compare solution
         id: cmp_solution
+        env:
+          failed: false
         run: |
           ATTACKS_DIR="attacks/${{ needs.validate-pr.outputs.attack_pr_number }}"
 
           # Compare the contents of attempt and solution
-          echo "failed=false" >> $GITHUB_ENV
           if ! cmp -s "$ATTACKS_DIR/attempt" "$ATTACKS_DIR/solution"; then
             echo "failed=true" >> $GITHUB_ENV
           fi
