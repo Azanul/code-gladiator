@@ -28,8 +28,6 @@ jobs:
 
       - name: Validate PR
         run: |
-          ATTACKS_DIR="attacks/${{ steps.pr_number.outputs.ATTACK_PR_NUMBER }}"
-
           # Check if attempt exists
           if [[ ! -f "attempt" ]]; then
             echo "::error file=attempt::attempt file does not exist in the pull request."
@@ -39,6 +37,7 @@ jobs:
       - name: Reorganize
         run: |
           # Move the files to the attacks directory
+          ATTACKS_DIR="attacks/${{ steps.pr_number.outputs.ATTACK_PR_NUMBER }}"
           mv attempt "$ATTACKS_DIR/"
 
           # Stage changes
