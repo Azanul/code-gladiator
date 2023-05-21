@@ -73,6 +73,7 @@ jobs:
           ATTACKS_DIR="attacks/${{ needs.validate-pr.outputs.attack_pr_number }}"
 
           # Compare the contents of attempt and solution
+          echo "failed='false'" >> $GITHUB_ENV
           if ! cmp -s "$ATTACKS_DIR/attempt" "$ATTACKS_DIR/solution"; then
             echo "failed='true'" >> $GITHUB_ENV
           fi
@@ -81,7 +82,7 @@ jobs:
         uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
+        if: ${{ env.failed }} == 'true'
         with:
           route: POST /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
           labels: '["defense", "failure"]'
@@ -90,7 +91,7 @@ jobs:
         uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
+        if: ${{ env.failed }} == 'true'
         with:
           route: POST /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
           labels: '["attack", "success"]'
@@ -99,7 +100,7 @@ jobs:
         uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
+        if: ${{ env.failed }} == 'false'
         with:
           route: POST /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
           labels: '["defense", "success"]'
@@ -108,7 +109,7 @@ jobs:
         uses: octokit/request-action@v2.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
+        if: ${{ env.failed }} == 'false'
         with:
           route: POST /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
           labels: '["attack", "failure"]'
