@@ -82,9 +82,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
-          route: POST /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
-          headers: |
-            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
+          route: PUT /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
           body: |
             {
               "labels": ["defense", "failure"]
@@ -96,9 +94,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.cmp_solution.outputs.failed }} == 'true'
         with:
-          route: POST /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
-          headers: |
-            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
+          route: PUT /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
           body: |
             {
               "labels": ["attack", "success"]
@@ -110,9 +106,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
         with:
-          route: POST /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
-          headers: |
-            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
+          route: PUT /repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels
           body: |
             {
               "labels": ["defense", "success"]
@@ -124,9 +118,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ steps.cmp_solution.outputs.failed }} == 'false'
         with:
-          route: POST /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
-          headers: |
-            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
+          route: PUT /repos/${{ github.repository }}/issues/${{ needs.validate-pr.outputs.attack_pr_number }}/labels
           body: |
             {
               "labels": ["attack", "failure"]
