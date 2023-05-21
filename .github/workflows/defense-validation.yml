@@ -10,6 +10,8 @@ permissions:
 jobs:
   validate-pr:
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.pr_number.outputs.ATTACK_PR_NUMBER }}
     if: github.event.label.name == 'defense'
 
     steps:
@@ -22,7 +24,7 @@ jobs:
         id: pr_number
         run: |
           PR_NUMBER=$(echo "${{ github.event.pull_request.body }}" | grep -oP '(?<=defends #)\d+')
-          echo "ATTACK_PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
+          echo "ATTACK_PR_NUMBER=${PR_NUMBER}" >> $GITHUB_OUTPUT
 
       - name: Validate PR
         run: |
@@ -59,6 +61,7 @@ jobs:
   check-solution:
     runs-on: ubuntu-latest
     if: github.event.label.name == 'defense'
+    needs: validate-pr
 
     steps:
       - name: Compare solution
@@ -103,6 +106,7 @@ jobs:
   merge-pr:
     runs-on: ubuntu-latest
     if: github.event.label.name == 'defense'
+    needs: check-solution
 
     steps:
       - name: Merge PR
