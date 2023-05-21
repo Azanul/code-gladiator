@@ -77,6 +77,7 @@ jobs:
           if ! cmp -s "$ATTACKS_DIR/attempt" "$ATTACKS_DIR/solution"; then
             echo "failed='true'" >> $GITHUB_ENV
           fi
+          echo ${{ env.failed }}
 
       - name: Add 'failure' label
         uses: octokit/request-action@v2.1.0
