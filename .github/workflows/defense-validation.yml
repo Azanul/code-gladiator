@@ -90,6 +90,20 @@ jobs:
               "labels": ["defense", "failure"]
             }
 
+      - name: Add 'success' label on attack PR
+        uses: octokit/request-action@v2.1.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.compare.outputs.failed == 'true'
+        with:
+          route: POST /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.pr_number }}/labels
+          headers: |
+            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            {
+              "labels": ["attack", "success"]
+            }
+
       - name: Add 'success' label
         uses: octokit/request-action@v2.1.7
         env:
@@ -104,6 +118,19 @@ jobs:
               "labels": ["defense", "success"]
             }
 
+      - name: Add 'failure' label on attack PR
+        uses: octokit/request-action@v2.1.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.compare.outputs.failed == 'false'
+        with:
+          route: POST /repos/${{ github.repository }}/pulls/${{ needs.validate-pr.outputs.pr_number }}/labels
+          headers: |
+            Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            {
+              "labels": ["attack", "failure"]
+            }
 
   merge-pr:
     runs-on: ubuntu-latest
