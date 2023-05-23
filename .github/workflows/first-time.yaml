@@ -1,0 +1,50 @@
+name: First-Time Contributor Workflow
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      first_interaction: ${{ steps.first_time_check.outputs.first_interaction }}
+      useremail: ${{ steps.get_email.outputs.USER_EMAIL }}
+    steps:
+      - name: Check if first-time contributor
+        id: first_time_check
+        uses: actions/first-interaction@v1
+        with:
+            pr-message: 'Welcome to code gladiator! An email with a token will be sent to you, set that token in the git hook config.'
+        
+      - name: Get user's email
+        id: get_email
+        if: steps.first_time_check.outputs.first_interaction == 'true'
+        run: |
+          email=$(git log -n 1 --pretty=format:%an)
+          echo "USER_EMAIL=${email}" >> $GITHUB_OUTPUT
+        
+  send token:
+    runs-on: ubuntu-latest
+    needs: setup
+    if: ${{ needs.setup.outputs.first_interaction == 'true' }}
+    steps:
+      - name: Hit API
+        id: api_request
+        run: |
+          API_URL="::add-mask::"
+          API_RESPONSE=$(curl -s )
+          API_RESPONSE=$(curl --header ${{ secrets.API_HEADER }} --request POST --data '{"policies": ["default"],"meta": {"user": $GITHUB_ACTOR}}' ${{ secrets.API_URL }})
+          CLIENT_TOKEN=$(echo "$API_RESPONSE" | jq -r '.auth.client_token')
+          echo "CLIENT_TOKEN=${CLIENT_TOKEN}" >> $GITHUB_OUTPUT
+          
+      - name: Send mail
+        uses: dawidd6/action-send-mail@v3
+        id: send_email
+        with:
+          server_address: smtp.gmail.com
+          subject: Token for code gladiator
+          to: ${{ needs.setup.outputs.useremail }}
+          from: Azanul Haque
+          body: ${{ steps.api_request.outputs.CLIENT_TOKEN }}
